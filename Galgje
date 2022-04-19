@@ -1,0 +1,238 @@
+pogingen = 6
+stoppen = False
+teller = 0
+geradenletters = []
+goedeletters = []
+alfabet = 'abcdefghijklmnopqrstuvwxyz'
+hoeveel = 0
+
+
+geheim = input('Wat is wil je als geheime woord instellen? ')
+
+
+def welkom():
+  naam = input('Wat is je naam? ')
+  print('Hallo ' + naam + ', welkom bij Galgje!')
+
+welkom()
+
+
+def tekenen(pogingen):
+  '''
+  Lijst met tekeingen van de vershillende fases van de galg.
+  Door na elke fout geraden letter een telvariabele aan te 
+  passen en dan uit deze lijst de tekening met het dat nummer te 
+  halen wordt de galg steeds completer naar mate er meer foute     letters worden geraden.
+  '''
+  tekeningen = [
+    
+  '''
+   ______________
+       |       \|
+       |	    |
+       O 	    |
+      /|\	    |
+      / \	    | 
+		        |
+		        |
+		        |		
+            ____|											
+  ''',
+
+  '''
+   ______________
+       |       \|
+       |	    |
+       O 	    |
+      /|\	    |
+      / 	    | 
+		        |
+		        |
+		        |		
+            ____|
+  ''',
+  
+  '''
+   ______________
+       |       \|
+       |	    |
+       O 	    |
+      /|\	    |
+       	        | 
+		        |
+		        |
+		        |		
+            ____|
+  ''',
+
+  '''
+  ______________
+       |       \|
+       |	    |
+       O 	    |
+      /|	    |
+       	        | 
+		        |
+		        |
+		        |		
+            ____|	
+  ''',
+
+  '''
+   ______________
+       |       \|
+       |	    |
+       O 	    |
+       |	    |
+       	        | 
+		        |
+		        |
+		        |		
+            ____|
+  ''',
+
+   '''
+   ______________
+       |       \|
+       |	    |
+       O 	    |
+        	    |
+       	        | 
+		        |
+		        |
+		        |		
+            ____|
+  ''',
+
+    '''
+  ______________
+       |       \|
+       |	    |
+        	    |
+        	    |
+       	        | 
+		        |
+		        |
+		        |		
+            ____|	
+  ''',
+]
+  return tekeningen[pogingen]
+
+
+def woordraden():
+  '''
+  Functie die de gebruiker het hele woord laat raden als alle      letters zijn geraden of er een ? wordt ingevoerd.
+  '''
+  global stoppen
+  global pogingen
+  global hoeveel
+  gok = input('Wat denk je dat het woord is? ')
+  if gok == geheim:
+    hoeveel = hoeveel + 1
+    print('Je hebt het woord geraden!')
+    print('Je had ' + str(hoeveel) + ' poging(en) nodig om het woord te raden.')
+
+    stoppen = True
+  
+  else:
+    print('Helaas, dat is niet het goede woord')
+    pogingen = pogingen - 1
+    print(tekenen(pogingen))
+    hoeveel = hoeveel + 1
+    
+
+def raden():
+  '''
+  Functie die checkt of de input van de gebruiker 1 letter lang
+  is, in het alfabet zit, of het al eerder is geraden en of de 
+  letter wel of niet in het woord zit.
+  '''
+  global hoeveel
+  global pogingen
+  global stoppen
+  global guess
+ 
+  guess = input('Raad een letter of kies "?" om het hele woord te raden ')
+  if len(guess) == 1:
+    if guess == '?':
+      woordraden()
+
+    elif guess in geradenletters:
+      print('Die letter heb je al geraden ')
+
+    elif guess not in alfabet:
+      print('Je mag alleen letters raden ')
+
+    elif guess not in geheim:
+      print(guess + ' zit niet in het woord ')
+      pogingen = pogingen - 1
+      geradenletters.append(guess)
+      print(tekenen(pogingen))
+      hoeveel = hoeveel + 1
+      print('Je hebt de volgende letters goed geraden: ' +             str(goedeletters) + '.')
+
+    else:
+      print(guess + ' zit in het woord')
+      geradenletters.append(guess)
+      goedeletters.append(guess)
+      hoeveel = hoeveel + 1
+      print('Je hebt de volgende letters goed geraden: ' +             str(goedeletters) + '.')
+
+
+  else:
+    if guess == 'QQ' or guess == 'qq':
+      stoppen = True
+
+    else:
+      print('Je mag maar 1 letter raden ')
+
+def checken():
+  '''
+  Functie die checkt of alle letters van het woord al geraden      zijn. Als dat zo is mag de gebruiker het hele woord raden.
+  '''
+  alleletters = True
+  global hoeveel
+  global teller
+  global guess
+  for letter in geheim:
+    if letter not in goedeletters:
+      alleletters = False
+    
+  if alleletters == True:
+    stoppen = False
+    while not stoppen:
+      global pogingen
+      gok = input('Je hebt alle letters al geraden. Wat denk je dat het woord is?')
+      if gok == geheim:
+        hoeveel = hoeveel + 1 
+        print('Je hebt het woord geraden!')
+        print('Je had ' + str(6 - pogingen) + ' pogingen nodig om het woord te raden.')
+      
+        stoppen = True
+    
+      else:
+        print('Helaas, dat is niet het goede woord')
+        pogingen = pogingen - 1
+        print(tekenen(pogingen))
+        hoeveel = hoeveel + 1
+
+while not stoppen and pogingen > 0:
+  '''
+  While loop die de gebruiker laat raden tot er geen pogingen 
+  meer over zijn,  de gebuiker QQ invult of het woord raadt.
+  '''
+  raden()
+  checken()
+  if pogingen == 0:
+    print('Helaas je hebt het woord niet kunnen raden.')
+    print('Het juiste woord was ' + geheim + '.')
+    stoppen = True
+
+  
+
+
+    
+
+
+
